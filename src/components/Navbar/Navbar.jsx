@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../../utils/constants";
 import { removeUser } from "../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { removeFeed } from "../../redux/feedSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const Navbar = () => {
         { withCredentials: true }
       );
       dispatch(removeUser());
+      dispatch(removeFeed());
+
       navigate("/login");
     } catch (error) {
       console.log(error);
@@ -42,10 +45,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+                <img alt="Tailwind CSS Navbar component" src={user?.photoUrl} />
               </div>
             </div>
             <ul
@@ -59,7 +59,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/connections">Connections</Link>
+              </li>
+              <li>
+                <Link to="/requests">Requests</Link>
               </li>
               <li onClick={handleLogout}>
                 <a>Logout</a>
