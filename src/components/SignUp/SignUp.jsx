@@ -1,23 +1,26 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils/constants";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/userSlice";
 
-const Login = () => {
-  const dispatch = useDispatch();
+const SignUp = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     try {
       const res = await axios.post(
-        `${BASE_URL}/auth/login`,
+        `${BASE_URL}/auth/register`,
         {
+          firstName,
+          lastName,
           email,
           password,
         },
@@ -25,20 +28,57 @@ const Login = () => {
       );
       if (res.data.success) {
         dispatch(addUser(res.data.data));
-        navigate("/");
+        navigate("/profile");
       }
     } catch (error) {
       setError(error?.response?.data?.message || "Something went wrong");
     }
   };
-
   return (
     <div className="flex justify-center my-10">
       <div className="card bg-base-300 w-96 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title justify-center">Login</h2>
+          <h2 className="card-title justify-center">Sign Up</h2>
           <div className="mt-10 mb-5">
-            <div>
+            <div className="my-2">
+              <label className="input input-bordered flex items-center gap-2 ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  className="h-4 w-4 opacity-70"
+                >
+                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+                </svg>
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="Firstname"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="my-2">
+              <label className="input input-bordered flex items-center gap-2 ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  className="h-4 w-4 opacity-70"
+                >
+                  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+                </svg>
+                <input
+                  type="text"
+                  className="grow"
+                  placeholder="Lastname"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="my-2">
               <label className="input input-bordered flex items-center gap-2 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +98,7 @@ const Login = () => {
                 />
               </label>
             </div>
-            <div>
+            <div className="my-2">
               <label className="input input-bordered flex items-center gap-2 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -84,12 +124,12 @@ const Login = () => {
           </div>
           {error && <p className="text-red-500">{error}</p>}
           <div className="card-actions justify-center">
-            <button className="btn btn-primary" onClick={handleLogin}>
-              Login
+            <button className="btn btn-primary" onClick={handleSignUp}>
+              Sign Up
             </button>
           </div>
           <p className="m-auto py-2">
-            <Link to="/signup">Don&apos;t have account?</Link>
+            <Link to="/login">Already have account?</Link>
           </p>
         </div>
       </div>
@@ -97,4 +137,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

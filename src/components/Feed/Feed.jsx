@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BASE_URL } from "../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addFeed } from "../../redux/feedSlice";
+import { addFeed, removeUserFromFeed } from "../../redux/feedSlice";
 import UserCard from "../UserCard/UserCard";
 
 const Feed = () => {
@@ -29,7 +29,7 @@ const Feed = () => {
       );
 
       if (res.data.success) {
-        getFeed();
+        dispatch(removeUserFromFeed(userId));
       }
     } catch (error) {}
   };
@@ -42,7 +42,7 @@ const Feed = () => {
   if (feed.length === 0)
     return (
       <div className="flex justify-center my-10">
-        <h1 className="text-bold text-2xl">No Feeds are there</h1>
+        <h1 className="text-bold text-2xl">No new users are found!</h1>
       </div>
     );
 
@@ -50,7 +50,11 @@ const Feed = () => {
     <div className="flex justify-center my-10">
       {feed &&
         feed.map((user) => (
-          <UserCard user={user} handleConnections={handleConnections} />
+          <UserCard
+            key={user._id}
+            user={user}
+            handleConnections={handleConnections}
+          />
         ))}
     </div>
   );

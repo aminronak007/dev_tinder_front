@@ -6,12 +6,13 @@ import { addUser } from "../../redux/userSlice";
 import axios from "axios";
 
 const EditProfile = ({ user }) => {
-  const [firstName, setFirstName] = useState(user?.firstName);
-  const [lastName, setLastName] = useState(user?.lastName);
-  const [photoUrl, setPhotoUrl] = useState(user?.photoUrl);
-  const [age, setAge] = useState(user?.age ? user.age : "");
-  const [gender, setGender] = useState(user?.gender ? user.gender : "");
-  const [about, setAbout] = useState(user?.about);
+  if (!user) return;
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+  const [age, setAge] = useState(user.age);
+  const [gender, setGender] = useState(user.gender);
+  const [about, setAbout] = useState(user.about);
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -90,14 +91,11 @@ const EditProfile = ({ user }) => {
                 <select
                   onChange={(e) => setGender(e.target.value)}
                   className="select w-full max-w-xs"
+                  defaultValue={gender}
                 >
                   <option disabled>Gender</option>
-                  <option value="male" selected={gender === "male"}>
-                    Male
-                  </option>
-                  <option value="female" selected={gender === "female"}>
-                    Female
-                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
               <div className="my-4">

@@ -8,6 +8,7 @@ import store from "./redux/store.js";
 import Feed from "./components/Feed/Feed.jsx";
 import Connections from "./components/Connections/Connections.jsx";
 import Requests from "./components/Requests/Requests.jsx";
+import SignUp from "./components/SignUp/SignUp.jsx";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Body />}>
             <Route path="/" element={<Feed />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/connections" element={<Connections />} />
             <Route path="/requests" element={<Requests />} />

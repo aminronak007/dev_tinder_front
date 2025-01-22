@@ -14,7 +14,7 @@ const UserCard = ({ user, flag = true, handleConnections = null }) => {
   return (
     <div className="card bg-base-100 w-96 shadow-xl">
       <figure>
-        <img src={photoUrl} alt="Shoes" />
+        <img className="w-96 h-96" src={photoUrl} alt="Shoes" />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
