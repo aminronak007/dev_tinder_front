@@ -1,7 +1,8 @@
 import React from "react";
 
-const UserCard = ({ user, flag = true }) => {
+const UserCard = ({ user, flag = true, handleConnections = null }) => {
   const {
+    _id,
     firstName = "",
     lastName = "",
     photoUrl = "",
@@ -28,8 +29,18 @@ const UserCard = ({ user, flag = true }) => {
 
         {flag && (
           <div className="card-actions justify-center my-4">
-            <button className="btn btn-error">Ignore</button>
-            <button className="btn btn-success">Interested</button>
+            <button
+              className="btn btn-error"
+              onClick={() => handleConnections("ignored", _id)}
+            >
+              Ignore
+            </button>
+            <button
+              className="btn btn-success"
+              onClick={() => handleConnections("interested", _id)}
+            >
+              Interested
+            </button>
           </div>
         )}
       </div>

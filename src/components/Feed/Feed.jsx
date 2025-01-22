@@ -9,7 +9,6 @@ const Feed = () => {
   const dispatch = useDispatch();
   const feed = useSelector((store) => store.feed);
   const getFeed = async () => {
-    if (feed) return;
     try {
       const res = await axios.get(`${BASE_URL}/user/feed`, {
         withCredentials: true,
@@ -21,16 +20,38 @@ const Feed = () => {
     } catch (error) {}
   };
 
+  const handleConnections = async (status, userId) => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/request/send/${status}/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        getFeed();
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     getFeed();
   }, []);
 
   if (!feed) return;
-  if (feed.length === 0) return <h1>No Feeds are there</h1>;
+  if (feed.length === 0)
+    return (
+      <div className="flex justify-center my-10">
+        <h1 className="text-bold text-2xl">No Feeds are there</h1>
+      </div>
+    );
 
   return (
     <div className="flex justify-center my-10">
-      {feed && feed.map((user) => <UserCard user={user} />)}
+      {feed &&
+        feed.map((user) => (
+          <UserCard user={user} handleConnections={handleConnections} />
+        ))}
     </div>
   );
 };
