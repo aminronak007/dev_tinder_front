@@ -10,6 +10,7 @@ import Connections from "./components/Connections/Connections.jsx";
 import Requests from "./components/Requests/Requests.jsx";
 import SignUp from "./components/SignUp/SignUp.jsx";
 import Premium from "./components/Premium/Premium.jsx";
+import Chat from "./components/Chat/Chat.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/connections" element={<Connections />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/premium" element={<Premium />} />
+            <Route path="/chat/:targetUserId" element={<Chat />} />
           </Route>
         </Routes>
       </BrowserRouter>
