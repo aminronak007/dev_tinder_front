@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../../utils/socket";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../../utils/constants";
 
 const Chat = () => {
+  const lastMessageRef = useRef(null);
   const { targetUserId } = useParams();
   const user = useSelector((store) => store.user);
   const userId = user?._id;
@@ -19,7 +22,38 @@ const Chat = () => {
       targetUserId,
       text: newMessage,
     });
+
     setNewMessage("");
+  };
+
+  const getMessages = async () => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/chat/messages`,
+        {
+          userId,
+          targetUserId,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data.success) {
+        const chatMessages = res?.data?.data?.messages.map((msg) => {
+          return {
+            firstName: msg?.senderId?.firstName,
+            text: msg.text,
+          };
+        });
+        setMessages(chatMessages);
+        scrollToLastMessage();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const scrollToLastMessage = () => {
+    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -36,8 +70,10 @@ const Chat = () => {
 
     socket.on("getMessage", ({ firstName, newMessage: text }) => {
       setMessages((prevMessages) => [...prevMessages, { firstName, text }]);
+      scrollToLastMessage();
     });
 
+    getMessages();
     return () => {
       socket.disconnect();
     };
@@ -49,7 +85,10 @@ const Chat = () => {
       <div className="flex-1 overflow-y-scroll p-5">
         {messages.map((msg, index) => {
           return (
-            <div key={index}>
+            <div
+              key={index}
+              ref={index === messages.length - 1 ? lastMessageRef : null}
+            >
               <div
                 className={
                   msg?.firstName === user?.firstName
